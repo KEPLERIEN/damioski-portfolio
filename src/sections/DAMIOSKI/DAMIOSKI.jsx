@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import "./DAMIOSKI.scss";
 import { Gradient } from './Gradient.js'
 import { motion, AnimatePresence } from "framer-motion"
+import winoaLogo from '../../assets/winoa-logo.png';
 
 const DAMIOSKI = () => {
     const [isAlternate, setIsAlternate] = useState(false);
@@ -57,15 +58,20 @@ const DAMIOSKI = () => {
                             </motion.span>
                         </AnimatePresence>
                     </motion.h1>
-                    <motion.p
+                    <motion.div
+                        className="intro-block"
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         transition={{ delay: 2.5, duration: 0.8 }}
                     >
-                        <b>⚠️ RECHERCHE D'UNE ALTERNANCE 2026 - 2027 EN ADMINISTRATEUR SYSTEME ET RÉSEAUX ⚠️</b>
-                        <br /><br />
-                        Développeur JS, C++, PHP | Réseaux d'entreprises, Technicien Informatique, Administrateur Systemes et Réseaux
-                    </motion.p>
+                        <div className="winoa-role">
+                            <img src={winoaLogo} alt="Winoa" className="winoa-logo" />
+                            <span className="winoa-role-text">Administrateur Systèmes et Réseaux à Winoa France</span>
+                        </div>
+                        <p className="skills-line">
+                            Développeur JS, C++, PHP | Réseaux d'entreprises, Technicien Informatique, Administrateur Systèmes et Réseaux
+                        </p>
+                    </motion.div>
                 </motion.div>
                 <motion.div 
                     className="profile-image"
