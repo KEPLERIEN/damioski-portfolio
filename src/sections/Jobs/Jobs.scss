@@ -137,11 +137,25 @@
       line-height: 1.3;
     }
 
+    .job-location {
+      color: #9a9a9a;
+      font-size: clamp(0.72rem, 1vw, 0.82rem);
+      margin-bottom: 8px;
+      line-height: 1.4;
+    }
+
     .job-title {
-      color: #ccc;
+      color: #e5dcf5;
       font-size: clamp(0.85rem, 1.2vw, 1rem);
-      margin-bottom: 15px;
+      font-weight: 500;
+      margin-bottom: 3px;
+    }
+
+    .job-contract {
+      color: #a9a9a9;
+      font-size: clamp(0.78rem, 1vw, 0.88rem);
       font-style: italic;
+      margin-bottom: 15px;
     }
 
     .job-tasks {
@@ -167,6 +181,21 @@
     }
   }
 
+  /* item alterné : détails à gauche du marker → texte à droite, bullets à droite */
+  @media (min-width: 769px) {
+    .timeline-content.left .timeline-job-details {
+      .job-tasks li {
+        padding-left: 0;
+        padding-right: 20px;
+
+        &:before {
+          left: auto;
+          right: 0;
+        }
+      }
+    }
+  }
+
   @media (max-width: 1024px) {
     padding: 60px 0;
 
@@ -179,94 +208,133 @@
     padding: 50px 0;
 
     .content-wrapper {
-      padding: 0 15px 0 8px;
+      padding: 0 20px;
     }
 
     .timeline {
-      padding-left: 0;
-    }
+      padding: 0;
 
-    .timeline::before {
-      left: 14px;
-      width: 3px;
-      background-color: rgba(145, 99, 203, 0.55);
-      border-radius: 2px;
-    }
-
-    .timeline-marker {
-      left: 14px;
-      top: 24px;
-      transform: translate(-50%, 0);
-      width: 14px;
-      height: 14px;
-      background-color: #9163CB;
-      border: 3px solid #0f0f0f;
-      outline: 2px solid #9163CB;
-      border-radius: 50%;
-      box-shadow: 0 0 0 4px rgba(145, 99, 203, 0.25), 0 2px 6px rgba(0,0,0,0.4);
-      z-index: 5;
+      /* rail vertical : s'estompe en haut et en bas */
+      &::before {
+        left: 11px;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        transform: translateX(-50%);
+        border-radius: 3px;
+        background: linear-gradient(
+          to bottom,
+          rgba(145, 99, 203, 0) 0,
+          rgba(145, 99, 203, 0.5) 56px,
+          rgba(145, 99, 203, 0.5) calc(100% - 40px),
+          rgba(145, 99, 203, 0) 100%
+        );
+      }
     }
 
     .timeline-item {
+      display: flex;
       flex-direction: column;
-      margin-bottom: clamp(28px, 5vw, 44px);
-      align-items: flex-end;
+      align-items: stretch;
+      width: 100%;
+      padding-left: 40px;
+      margin-bottom: clamp(24px, 4.5vw, 36px);
+      position: relative;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    /* le marqueur DOM ne peut pas viser le centre de la carte : on le remplace */
+    .timeline-marker {
+      display: none;
     }
 
     .timeline-content {
-      width: calc(100% - 28px);
+      width: 100%;
       margin: 0;
       padding: 0;
       text-align: left;
       position: relative;
 
-      &.left, &.right {
+      &.left,
+      &.right {
         margin: 0;
+        padding: 0;
         text-align: left;
-        order: 0;
       }
 
-      &.left:has(.timeline-job-card) { order: 1; }
-      &.right:has(.timeline-job-card) { order: 1; }
-      &.left:has(.timeline-job-details) { order: 2; }
-      &.right:has(.timeline-job-details) { order: 2; }
+      &:has(.timeline-job-details) {
+        order: 2;
+      }
 
-      &:first-of-type::before {
-        content: "";
-        position: absolute;
-        left: -14px;
-        top: 28px;
-        width: 14px;
-        height: 2px;
-        background-color: rgba(145, 99, 203, 0.55);
-        z-index: 2;
+      /* le bloc carte est toujours en premier et porte le point + le connecteur,
+         donc le point tombe pile au centre vertical de la carte */
+      &:has(.timeline-job-card) {
+        order: 1;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: -29px;
+          top: 50%;
+          width: 29px;
+          height: 2px;
+          background-color: rgba(145, 99, 203, 0.5);
+          transform: translateY(-50%);
+        }
+
+        &::after {
+          content: "";
+          position: absolute;
+          left: -29px;
+          top: 50%;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background-color: #9163CB;
+          box-shadow:
+            0 0 0 3px rgba(145, 99, 203, 0.22),
+            0 0 12px rgba(145, 99, 203, 0.5);
+          transform: translate(-50%, -50%);
+          z-index: 2;
+        }
       }
     }
 
     .timeline-job-card {
       width: 100%;
-      border-radius: 12px;
-      margin-bottom: 0;
-      border-bottom-left-radius: 4px;
+      margin: 0;
+      border-radius: 12px 12px 4px 4px;
       overflow: hidden;
     }
 
     .timeline-job-details {
       width: 100%;
-      background-color: rgba(97, 67, 140, 0.22);
-      border: 1px solid rgba(145, 99, 203, 0.28);
+      margin: 0;
+      padding: 14px 18px 16px;
+      background-color: rgba(97, 67, 140, 0.25);
+      border: 1px solid rgba(145, 99, 203, 0.25);
       border-top: none;
       border-radius: 0 0 12px 12px;
-      padding: 16px 16px 20px;
-      margin: 0;
 
       h3 {
         font-size: 1rem;
         margin-bottom: 6px;
       }
 
+      .job-location {
+        font-size: 0.75rem;
+      }
+
       .job-title {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
+        margin-bottom: 3px;
+      }
+
+      .job-contract {
+        font-size: 0.78rem;
         margin-bottom: 12px;
       }
 
@@ -278,40 +346,53 @@
         }
       }
     }
+
+    /* pas de bloc détails : la carte reste un bloc arrondi complet */
+    .timeline-item:not(:has(.timeline-job-details)) {
+      .timeline-job-card {
+        border-radius: 12px;
+      }
+    }
   }
 
   @media (max-width: 480px) {
     padding: 40px 0;
 
     .content-wrapper {
-      padding: 0 12px 0 6px;
+      padding: 0 14px;
     }
 
     .timeline::before {
-      left: 11px;
+      left: 9px;
       width: 2.5px;
+      background: linear-gradient(
+        to bottom,
+        rgba(145, 99, 203, 0) 0,
+        rgba(145, 99, 203, 0.5) 48px,
+        rgba(145, 99, 203, 0.5) calc(100% - 32px),
+        rgba(145, 99, 203, 0) 100%
+      );
     }
 
-    .timeline-marker {
-      left: 11px;
-      top: 22px;
-      width: 12px;
-      height: 12px;
-      border-width: 2.5px;
+    .timeline-item {
+      padding-left: 34px;
     }
 
-    .timeline-content {
-      width: calc(100% - 22px);
+    .timeline-content:has(.timeline-job-card) {
+      &::before {
+        left: -25px;
+        width: 25px;
+      }
 
-      &:first-of-type::before {
-        left: -11px;
-        top: 26px;
-        width: 11px;
+      &::after {
+        left: -25px;
+        width: 14px;
+        height: 14px;
       }
     }
 
     .timeline-job-details {
-      padding: 14px 14px 18px;
+      padding: 12px 15px 14px;
 
       .job-tasks {
         li {

@@ -56,6 +56,35 @@ section {
     overflow-x: hidden;
 }
 
+/* Fondu entre les sections : dégradé vers le fond noir en haut et en bas */
+section {
+    position: relative;
+
+    &:not(:first-child)::before,
+    &:not(:last-child)::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        width: 100%;
+        height: clamp(70px, 12vh, 160px);
+        pointer-events: none;
+        /* au-dessus des fonds (canvas/dégradés) mais sous le contenu du hero */
+        z-index: 1;
+    }
+
+    /* fondu depuis la section précédente */
+    &:not(:first-child)::before {
+        top: 0;
+        background: linear-gradient(to bottom, #000 0%, rgba(0, 0, 0, 0) 100%);
+    }
+
+    /* fondu vers la section suivante */
+    &:not(:last-child)::after {
+        bottom: 0;
+        background: linear-gradient(to top, #000 0%, rgba(0, 0, 0, 0) 100%);
+    }
+}
+
 img {
     max-width: 100%;
     height: auto;

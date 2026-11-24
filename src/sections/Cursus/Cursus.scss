@@ -16,10 +16,11 @@
     padding: 0 20px;
   }
 
-  .content-wrapper {
+    .content-wrapper {
     width: 100%;
     max-width: 1200px;
     padding: 0 20px;
+    margin: 0 auto;
   }
 
   .timeline {
@@ -28,8 +29,8 @@
     align-items: center;
     position: relative;
     width: 100%;
-    max-width: 1000px;
     margin: 0 auto;
+    padding-left: 0;
     
     &::before {
       content: '';
@@ -47,6 +48,7 @@
     display: flex;
     width: 100%;
     justify-content: center;
+    align-items: center;
     margin-bottom: clamp(40px, 8vw, 80px);
     position: relative;
     
@@ -55,18 +57,18 @@
     }
   }
 
-  .timeline-marker {
-    width: clamp(20px, 3vw, 30px);
-    height: clamp(20px, 3vw, 30px);
-    background-color: #9163CB;
-    border-radius: 50%;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    z-index: 2;
-    box-shadow: 0 0 0 4px rgba(145, 99, 203, 0.2);
-  }
+    .timeline-marker {
+      width: clamp(20px, 3vw, 30px);
+      height: clamp(20px, 3vw, 30px);
+      background-color: #9163CB;
+      border-radius: 50%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 2;
+      box-shadow: 0 0 0 4px rgba(145, 99, 203, 0.2);
+    }
 
   .timeline-content {
     width: 40%;
@@ -123,7 +125,6 @@
 
   .timeline-school {
     padding: 10px 0;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -154,87 +155,116 @@
     padding: 50px 0;
 
     .content-wrapper {
-      padding: 0 15px 0 8px;
+      padding: 0 20px;
     }
 
     .timeline {
-      padding-left: 0;
-    }
+      padding: 0;
 
-    .timeline::before {
-      left: 14px;
-      width: 3px;
-      background-color: rgba(145, 99, 203, 0.55);
-      border-radius: 2px;
-    }
-
-    .timeline-marker {
-      left: 14px;
-      top: 24px;
-      transform: translate(-50%, 0);
-      width: 14px;
-      height: 14px;
-      background-color: #9163CB;
-      border: 3px solid #0f0f0f;
-      outline: 2px solid #9163CB;
-      border-radius: 50%;
-      box-shadow: 0 0 0 4px rgba(145, 99, 203, 0.25), 0 2px 6px rgba(0,0,0,0.4);
-      z-index: 5;
+      /* rail vertical : s'estompe en haut et en bas */
+      &::before {
+        left: 11px;
+        top: 0;
+        height: 100%;
+        width: 3px;
+        transform: translateX(-50%);
+        border-radius: 3px;
+        background: linear-gradient(
+          to bottom,
+          rgba(145, 99, 203, 0) 0,
+          rgba(145, 99, 203, 0.5) 56px,
+          rgba(145, 99, 203, 0.5) calc(100% - 40px),
+          rgba(145, 99, 203, 0) 100%
+        );
+      }
     }
 
     .timeline-item {
+      display: flex;
       flex-direction: column;
-      margin-bottom: clamp(28px, 5vw, 44px);
-      align-items: flex-end;
+      align-items: stretch;
+      width: 100%;
+      padding-left: 40px;
+      margin-bottom: clamp(24px, 4.5vw, 36px);
+      position: relative;
+
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    /* le marqueur DOM ne peut pas viser le centre de la carte : on le remplace */
+    .timeline-marker {
+      display: none;
     }
 
     .timeline-content {
-      width: calc(100% - 28px);
+      width: 100%;
       margin: 0;
       padding: 0;
       text-align: left;
       position: relative;
 
-      &.left, &.right {
+      &.left,
+      &.right {
         margin: 0;
+        padding: 0;
         text-align: left;
-        order: 0;
       }
 
-      &.left:has(.timeline-card) { order: 1; }
-      &.right:has(.timeline-card) { order: 1; }
-      &.left:has(.timeline-school) { order: 2; }
-      &.right:has(.timeline-school) { order: 2; }
+      &:has(.timeline-school) {
+        order: 2;
+      }
 
-      &:first-of-type::before {
-        content: "";
-        position: absolute;
-        left: -14px;
-        top: 28px;
-        width: 14px;
-        height: 2px;
-        background-color: rgba(145, 99, 203, 0.55);
-        z-index: 2;
+      /* le bloc carte est toujours en premier et porte le point + le connecteur,
+         donc le point tombe pile au centre vertical de la carte */
+      &:has(.timeline-card) {
+        order: 1;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: -29px;
+          top: 50%;
+          width: 29px;
+          height: 2px;
+          background-color: rgba(145, 99, 203, 0.5);
+          transform: translateY(-50%);
+        }
+
+        &::after {
+          content: "";
+          position: absolute;
+          left: -29px;
+          top: 50%;
+          width: 16px;
+          height: 16px;
+          border-radius: 50%;
+          background-color: #9163CB;
+          box-shadow:
+            0 0 0 3px rgba(145, 99, 203, 0.22),
+            0 0 12px rgba(145, 99, 203, 0.5);
+          transform: translate(-50%, -50%);
+          z-index: 2;
+        }
       }
     }
 
     .timeline-card {
       width: 100%;
-      border-radius: 12px;
-      margin-bottom: 0;
-      padding: 18px 16px;
-      border-bottom-left-radius: 4px;
-      position: relative;
+      margin: 0;
+      padding: 16px 18px;
+      border-radius: 12px 12px 4px 4px;
     }
 
     .timeline-school {
       width: 100%;
-      background-color: rgba(97, 67, 140, 0.22);
-      border: 1px solid rgba(145, 99, 203, 0.28);
+      margin: 0;
+      padding: 14px 18px 16px;
+      background-color: rgba(97, 67, 140, 0.25);
+      border: 1px solid rgba(145, 99, 203, 0.25);
       border-top: none;
       border-radius: 0 0 12px 12px;
-      padding: 14px 16px 18px;
-      margin-top: 0;
 
       h3 {
         font-size: 1rem;
@@ -245,40 +275,53 @@
         font-size: 0.85rem;
       }
     }
+
+    /* pas de bloc école : la carte reste un bloc arrondi complet */
+    .timeline-item:not(:has(.timeline-school)) {
+      .timeline-card {
+        border-radius: 12px;
+      }
+    }
   }
 
   @media (max-width: 480px) {
     padding: 40px 0;
 
     .content-wrapper {
-      padding: 0 12px 0 6px;
+      padding: 0 14px;
     }
 
     .timeline::before {
-      left: 11px;
+      left: 9px;
       width: 2.5px;
+      background: linear-gradient(
+        to bottom,
+        rgba(145, 99, 203, 0) 0,
+        rgba(145, 99, 203, 0.5) 48px,
+        rgba(145, 99, 203, 0.5) calc(100% - 32px),
+        rgba(145, 99, 203, 0) 100%
+      );
     }
 
-    .timeline-marker {
-      left: 11px;
-      top: 22px;
-      width: 12px;
-      height: 12px;
-      border-width: 2.5px;
+    .timeline-item {
+      padding-left: 34px;
     }
 
-    .timeline-content {
-      width: calc(100% - 22px);
+    .timeline-content:has(.timeline-card) {
+      &::before {
+        left: -25px;
+        width: 25px;
+      }
 
-      &:first-of-type::before {
-        left: -11px;
-        top: 26px;
-        width: 11px;
+      &::after {
+        left: -25px;
+        width: 14px;
+        height: 14px;
       }
     }
 
     .timeline-card {
-      padding: 16px 14px;
+      padding: 14px 15px;
 
       h3 {
         font-size: 0.95rem;
@@ -290,7 +333,7 @@
     }
 
     .timeline-school {
-      padding: 12px 14px 16px;
+      padding: 12px 15px 14px;
     }
   }
 } 
