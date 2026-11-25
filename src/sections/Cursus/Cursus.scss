@@ -5,6 +5,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   min-height: 100vh;
   min-height: 100dvh;
 
@@ -191,6 +192,34 @@
       &:last-child {
         margin-bottom: 0;
       }
+
+      /* point + connecteur centrés sur l'item complet (carte + école) */
+      &::before {
+        content: "";
+        position: absolute;
+        left: 11px;
+        top: 50%;
+        width: 29px;
+        height: 2px;
+        background-color: rgba(145, 99, 203, 0.5);
+        transform: translateY(-50%);
+      }
+
+      &::after {
+        content: "";
+        position: absolute;
+        left: 11px;
+        top: 50%;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background-color: #9163CB;
+        box-shadow:
+          0 0 0 3px rgba(145, 99, 203, 0.22),
+          0 0 12px rgba(145, 99, 203, 0.5);
+        transform: translate(-50%, -50%);
+        z-index: 2;
+      }
     }
 
     /* le marqueur DOM ne peut pas viser le centre de la carte : on le remplace */
@@ -216,37 +245,9 @@
         order: 2;
       }
 
-      /* le bloc carte est toujours en premier et porte le point + le connecteur,
-         donc le point tombe pile au centre vertical de la carte */
+      /* le bloc carte est toujours en premier */
       &:has(.timeline-card) {
         order: 1;
-
-        &::before {
-          content: "";
-          position: absolute;
-          left: -29px;
-          top: 50%;
-          width: 29px;
-          height: 2px;
-          background-color: rgba(145, 99, 203, 0.5);
-          transform: translateY(-50%);
-        }
-
-        &::after {
-          content: "";
-          position: absolute;
-          left: -29px;
-          top: 50%;
-          width: 16px;
-          height: 16px;
-          border-radius: 50%;
-          background-color: #9163CB;
-          box-shadow:
-            0 0 0 3px rgba(145, 99, 203, 0.22),
-            0 0 12px rgba(145, 99, 203, 0.5);
-          transform: translate(-50%, -50%);
-          z-index: 2;
-        }
       }
     }
 
@@ -305,16 +306,14 @@
 
     .timeline-item {
       padding-left: 34px;
-    }
 
-    .timeline-content:has(.timeline-card) {
       &::before {
-        left: -25px;
+        left: 9px;
         width: 25px;
       }
 
       &::after {
-        left: -25px;
+        left: 9px;
         width: 14px;
         height: 14px;
       }
